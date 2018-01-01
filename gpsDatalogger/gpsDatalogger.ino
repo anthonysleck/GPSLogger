@@ -46,10 +46,13 @@
 */
 
 // includes
+#include <ESP8266WebServer.h>
+#include <ESP8266WiFi.h>
 #include <SD.h>
 #include <SoftwareSerial.h>
 #include <SPI.h>
 #include <TinyGPS++.h>
+#include <WiFiClient.h> 
 
 // digital pin assignments
 #define CS          15
@@ -59,15 +62,31 @@
 #define SERIAL_BAUD 115200
 
 // constants and variables
+const char *ssid = "ESPAP";
+ESP8266WebServer server(80);
+File myDataFile;
 SoftwareSerial ss (GPS_RX, GPS_TX);
 TinyGPSPlus gps;
-File myDataFile;
+
+void handleRoot() {
+  server.send(200, "text.html", "<h1>You are conected to the Datalogger Server</h1>");
+}
 
 void setup() {
   unsigned long timeOut = millis() + 60000;
   while (millis() <= timeOut)
     // serial interface initialization
     Serial.begin(SERIAL_BAUD);
+
+    // enable and configure WiFi access point and server
+    Serial.print("Configuring Access Point...");
+    WiFi.softAP(ssid);
+    IPAddress myIP = WiFi.softAPIP();
+    Serial.print("AP IP Address: ");
+    Serial.println(myIP);
+    server.on("/", handleRoot);
+    server.begin();
+    Serial.println("Server started...");
 
   // SDCard initialization
   Serial.print("Initializing SDCard...");
@@ -108,6 +127,7 @@ void gpsInfo() {
     Serial.print(F(","));
     Serial.print(gps.satellites.value());
 
+    Serial.print("Attempting to open the LOG.CSV file from the SDCard...");
     myDataFile = SD.open("log.csv", FILE_WRITE);
     if (myDataFile)
     {
