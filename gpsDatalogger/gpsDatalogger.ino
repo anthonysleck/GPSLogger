@@ -52,7 +52,7 @@
 #include <SoftwareSerial.h>
 #include <SPI.h>
 #include <TinyGPS++.h>
-#include <WiFiClient.h> 
+#include <WiFiClient.h>
 
 // digital pin assignments
 #define CS          15
@@ -78,15 +78,15 @@ void setup() {
     // serial interface initialization
     Serial.begin(SERIAL_BAUD);
 
-    // enable and configure WiFi access point and server
-    Serial.print("Configuring Access Point...");
-    WiFi.softAP(ssid);
-    IPAddress myIP = WiFi.softAPIP();
-    Serial.print("AP IP Address: ");
-    Serial.println(myIP);
-    server.on("/", handleRoot);
-    server.begin();
-    Serial.println("Server started...");
+  // enable and configure WiFi access point and server
+  Serial.print("Configuring Access Point...");
+  WiFi.softAP(ssid);
+  IPAddress myIP = WiFi.softAPIP();
+  Serial.print("AP IP Address: ");
+  Serial.println(myIP);
+  server.on("/", handleRoot);
+  server.begin();
+  Serial.println("Server started...");
 
   // SDCard initialization
   Serial.print("Initializing SDCard...");
@@ -103,8 +103,7 @@ void setup() {
 void loop() {
   // start GPS data Read/Write
   while (ss.available() > 0)
-    if (gps.encode(ss.read()))
-      gpsInfo(); // read/write GPS sensor data
+    gpsInfo(); // read/write GPS sensor data
 
   if (millis() > 5000 && gps.charsProcessed() < 10)
   {
@@ -157,9 +156,3 @@ void gpsInfo() {
   }
   Serial.println();
 }
-
-/* void mpuSensorReadInfo() {
-  // read MPU9250 sensor data
-  }
-*/
-
