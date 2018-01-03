@@ -66,6 +66,7 @@ const char *ssid = "ESPAP";
 ESP8266WebServer server(80);
 File myDataFile;
 SoftwareSerial ss (GPS_RX, GPS_TX);
+String webString = "";
 TinyGPSPlus gps;
 
 void handleRoot() {
@@ -154,5 +155,5 @@ void gpsInfo() {
   {
     Serial.print(F("INVALID DATA or GPS cannot see sky!"));
   }
-  Serial.println();
+
 }
