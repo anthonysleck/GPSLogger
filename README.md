@@ -31,4 +31,4 @@ SDCard Reader
    
 Contact Info
 - email anthony.sleck@gmail.com
-- web   anthony.sleckconsulting.com
+- web   anthony.sleck.us
